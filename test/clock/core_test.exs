@@ -3,7 +3,6 @@ defmodule Clock.CoreTest do
 
   test "current_time" do
     # Matches this time format: 7:25 PM"
-    IO.puts "Current time: #{Clock.Core.current_time()}"
     assert Clock.Core.current_time()
            |> String.match?(~r/^(1[0-2]|0?[1-9]):([0-5]?[0-9])(\s[AP]M)$/)
   end
