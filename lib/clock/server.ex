@@ -2,15 +2,15 @@ defmodule Clock.Server do
   use GenServer
   alias Clock.Core
 
-  # 1 minute
-  @tick_period 1
-
-  def start_link(%DateTime{} = initial_state) do
-    GenServer.start_link(__MODULE__, initial_state)
+  def start_link(tick_seconds: tick_seconds) when is_integer(tick_seconds) do
+    GenServer.start_link(__MODULE__, tick_seconds)
   end
 
-  def init(%DateTime{} = initial_state) do
-    schedule_tick()
+  def init(tick_seconds) when is_integer(tick_seconds) do
+    initial_state =
+      %{tick_seconds: tick_seconds, time: Core.current_time()}
+
+    schedule_tick(tick_seconds)
     {:ok, initial_state}
   end
 
@@ -18,13 +18,15 @@ defmodule Clock.Server do
     {:reply, state, state}
   end
 
-  def handle_info(:tick, state) do
-    new_state = Core.add_minutes(state, @tick_period)
-    schedule_tick()
+  def handle_info(:tick, %{tick_seconds: tick_seconds, time: time} = state) do
+    new_state =
+      %{state | time: Core.add_seconds(time, tick_seconds)}
+
+    schedule_tick(tick_seconds)
     {:noreply, new_state}
   end
 
-  defp schedule_tick do
-    Process.send_after(self(), :tick, @tick_period * 60 * 1000)
+  defp schedule_tick(tick_seconds) when is_integer(tick_seconds)  do
+    Process.send_after(self(), :tick, tick_seconds * 1000)
   end
 end

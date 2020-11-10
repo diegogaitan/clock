@@ -3,25 +3,40 @@ defmodule Core.ServerTest do
   alias Clock.Server
   alias Clock.Core
 
+  @tick_seconds 1
+
   setup do
-    server = start_supervised!({Server, Core.current_time()})
+    server = start_supervised!({Server, tick_seconds: @tick_seconds})
     %{:server => server}
   end
 
   test "state", %{:server => server} do
-    assert_state(server)
+    server
+    |> get_time()
+    |> assert_formatted_time()
   end
 
   test "tick", %{:server => server} do
     send(server, :tick)
-    assert_state(server)
+
+    start_time = get_time(server)
+    assert_formatted_time(start_time)
+
+    Process.sleep(@tick_seconds * 1000)
+
+    end_time = get_time(server)
+    assert_formatted_time(end_time)
+
+    assert Core.diff_seconds(end_time, start_time) >= @tick_seconds
   end
 
-  defp assert_state(server) when is_pid(server) do
-    formatted_time =
-      GenServer.call(server, :state)
-      |> Core.format_time()
+  defp get_time(server) when is_pid(server) do
+    GenServer.call(server, :state) |> Map.get(:time)
+  end
 
-    assert String.match?(formatted_time, Core.format_time_regex())
+  defp assert_formatted_time(time) do
+    assert time
+            |> Core.format_time()
+            |> String.match?(Core.format_time_regex())
   end
 end

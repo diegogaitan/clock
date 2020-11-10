@@ -13,14 +13,14 @@ defmodule Clock.CoreTest do
            |> String.match?(Core.format_time_regex())
   end
 
-  test "duration_minutes" do
-    assert %Timex.Duration{} = Core.duration_minutes(5)
+  test "duration_seconds" do
+    assert %Timex.Duration{} = Core.duration_seconds(5)
   end
 
-  test "add_minutes" do
+  test "add_seconds" do
     time = Core.current_time()
-    new_time = Core.add_minutes(time, 5)
+    new_time = Core.add_seconds(time, 5)
 
-    assert 5 = Core.diff_minutes(new_time, time)
+    assert 5 = Core.diff_seconds(new_time, time)
   end
 end
