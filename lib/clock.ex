@@ -1,18 +1,18 @@
 defmodule Clock do
-  @moduledoc """
-  Documentation for `Clock`.
-  """
+  alias Clock.{Server, Core}
 
-  @doc """
-  Hello world.
+  def start_link(tick_seconds: tick_seconds) when is_integer(tick_seconds) do
+    Server.start_link(tick_seconds: tick_seconds)
+  end
 
-  ## Examples
+  def time(clock) when is_pid(clock) do
+    clock
+    |> GenServer.call(:state)
+    |> Map.get(:time)
+    |> Core.format_time()
+  end
 
-      iex> Clock.hello()
-      :world
-
-  """
-  def hello do
-    :world
+  def tick(clock) when is_pid(clock) do
+    send(clock, :tick)
   end
 end

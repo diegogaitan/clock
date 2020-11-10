@@ -1,8 +1,10 @@
 defmodule Clock.Core do
   use Timex
 
+  @time_format "{h12}:{m}:{s} {AM}"
+
   def format_time(time) do
-    {:ok, now} = Timex.format(time, "{h12}:{m}:{s} {AM}")
+    {:ok, now} = Timex.format(time, @time_format)
     now
   end
 
@@ -27,5 +29,10 @@ defmodule Clock.Core do
   # Based on this article: https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch04s06.html
   def format_time_regex do
     ~r/^(1[0-2]|0?[1-9]):([0-5]?[0-9]):([0-5]?[0-9])(\s[AP]M)$/
+  end
+
+  def parse(time_str) when is_binary(time_str) do
+    {:ok, naive_datetime} = Timex.parse(time_str, @time_format)
+    Timex.to_datetime(naive_datetime)
   end
 end

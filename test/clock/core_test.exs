@@ -23,4 +23,8 @@ defmodule Clock.CoreTest do
 
     assert 5 = Core.diff_seconds(new_time, time)
   end
+
+  test "parse" do
+    assert %DateTime{} = Core.parse("8:25:56 AM")
+  end
 end
