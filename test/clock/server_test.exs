@@ -19,7 +19,7 @@ defmodule Core.ServerTest do
 
   defp assert_state(server) when is_pid(server) do
     formatted_time =
-      GenServer.call(server, :state) 
+      GenServer.call(server, :state)
       |> Core.format_time()
 
     assert String.match?(formatted_time, Core.format_time_regex())

@@ -2,7 +2,8 @@ defmodule Clock.Server do
   use GenServer
   alias Clock.Core
 
-  @tick_period 1  # 1 minute
+  # 1 minute
+  @tick_period 1
 
   def start_link(%DateTime{} = initial_state) do
     GenServer.start_link(__MODULE__, initial_state)
