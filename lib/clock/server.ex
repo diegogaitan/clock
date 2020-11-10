@@ -7,8 +7,7 @@ defmodule Clock.Server do
   end
 
   def init(tick_seconds) when is_integer(tick_seconds) do
-    initial_state =
-      %{tick_seconds: tick_seconds, time: Core.current_time()}
+    initial_state = %{tick_seconds: tick_seconds, time: Core.current_time()}
 
     schedule_tick(tick_seconds)
     {:ok, initial_state}
@@ -19,14 +18,13 @@ defmodule Clock.Server do
   end
 
   def handle_info(:tick, %{tick_seconds: tick_seconds, time: time} = state) do
-    new_state =
-      %{state | time: Core.add_seconds(time, tick_seconds)}
+    new_state = %{state | time: Core.add_seconds(time, tick_seconds)}
 
     schedule_tick(tick_seconds)
     {:noreply, new_state}
   end
 
-  defp schedule_tick(tick_seconds) when is_integer(tick_seconds)  do
+  defp schedule_tick(tick_seconds) when is_integer(tick_seconds) do
     Process.send_after(self(), :tick, tick_seconds * 1000)
   end
 end

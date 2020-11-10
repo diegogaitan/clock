@@ -36,7 +36,7 @@ defmodule Core.ServerTest do
 
   defp assert_formatted_time(time) do
     assert time
-            |> Core.format_time()
-            |> String.match?(Core.format_time_regex())
+           |> Core.format_time()
+           |> String.match?(Core.format_time_regex())
   end
 end

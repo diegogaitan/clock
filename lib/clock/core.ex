@@ -23,6 +23,8 @@ defmodule Clock.Core do
     Timex.diff(time1, time2, :seconds)
   end
 
+  # Regex for this time format 7:56 AM
+  # Based on this article: https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch04s06.html
   def format_time_regex do
     ~r/^(1[0-2]|0?[1-9]):([0-5]?[0-9]):([0-5]?[0-9])(\s[AP]M)$/
   end
