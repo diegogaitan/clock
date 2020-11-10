@@ -1,21 +1,41 @@
 # Clock
 
-**TODO: Add description**
+**Implementation of a Clock using GenServer**
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `clock` to your list of dependencies in `mix.exs`:
+The file `.tool-versions` for [asdf](https://github.com/asdf-vm/asdf) contains the Elixir version to use: `1.11.1`.
+
+## Playing with the application
+
+Through the `Clock` module to call the API methods that encapsulate the
+OTP/GenServer calls:
 
 ```elixir
-def deps do
-  [
-    {:clock, "~> 0.1.0"}
-  ]
-end
+iex(2)> {:ok, clock} = Clock.start_link(tick_seconds: 1)
+{:ok, #PID<0.243.0>}
+iex(3)> Clock.time(clock)
+"3:44:32 PM"
+iex(4)> Clock.time(clock)
+"3:44:33 PM"
+iex(5)> Clock.time(clock)
+"3:44:34 PM"
+iex(6)> Clock.tick(clock)
+:tick
+iex(7)> Clock.time(clock)
+"3:44:37 PM"
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/clock](https://hexdocs.pm/clock).
+## Running tests
 
+Run `mix test` :
+
+```
+➜  clock (master) ✗ mix test
+.........
+
+Finished in 1.1 seconds
+9 tests, 0 failures
+
+Randomized with seed 924476
+```
