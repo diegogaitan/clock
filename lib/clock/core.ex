@@ -14,11 +14,16 @@ defmodule Clock.Core do
     Timex.Duration.from_minutes(minutes)
   end
 
-  def add(%DateTime{} = time, %Timex.Duration{} = duration) do
+  def add_minutes(%DateTime{} = time, minutes) when is_integer(minutes) do
+    duration = duration_minutes(minutes)
     Timex.add(time, duration)
   end
 
   def diff_minutes(%DateTime{} = time1, %DateTime{} = time2) do
     Timex.diff(time1, time2, :minute)
+  end
+
+  def format_time_regex do
+    ~r/^(1[0-2]|0?[1-9]):([0-5]?[0-9])(\s[AP]M)$/
   end
 end

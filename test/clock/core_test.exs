@@ -10,17 +10,16 @@ defmodule Clock.CoreTest do
     # Matches this time format: 7:25 PM"
     assert Core.current_time()
            |> Core.format_time()
-           |> String.match?(~r/^(1[0-2]|0?[1-9]):([0-5]?[0-9])(\s[AP]M)$/)
+           |> String.match?(Core.format_time_regex())
   end
 
   test "duration_minutes" do
     assert %Timex.Duration{} = Core.duration_minutes(5)
   end
 
-  test "add" do
+  test "add_minutes" do
     time = Core.current_time()
-    duration = Core.duration_minutes(5)
-    new_time = Core.add(time, duration)
+    new_time = Core.add_minutes(time, 5)
 
     assert 5 = Core.diff_minutes(new_time, time)
   end
